@@ -65,16 +65,8 @@ app.get("/listings/:id", async(req, res)=>{
 
 //create route 
 
-// 
-
-app.post("/listings", async (req, res) => {
-    console.log("----------------");
-    console.log(req.body);
-    console.log(req.body.listing);
-
+app.post("/listings", async (req, res) =>{
     const newListing = new Listing(req.body.listing);
-    console.log(newListing);
-
     await newListing.save();
     res.redirect("/listings");
 });
@@ -110,6 +102,8 @@ app.delete("/listings/:id", async (req, res) => {
     res.redirect("/listings");
 });
     
+ 
+
 
 
 app.listen(8080, () =>{
