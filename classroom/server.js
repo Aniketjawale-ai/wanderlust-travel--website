@@ -21,6 +21,12 @@ app.set("views", path.join(__dirname, "views"));
 
     app.use(session(sessionOptions));
     app.use(flash());
+
+    app.use((req, res, next) => {
+        res.locals.successMsg = req.flash("success");
+        res.locals.errorMsg = req.flash("error");
+        next();
+    });
     
 
 
@@ -38,8 +44,7 @@ app.set("views", path.join(__dirname, "views"));
     });
 
     app.get("/hello", (req, res) =>{
-        res.locals.successMsg = req.flash("success");
-        res.locals.errorMsg = req.flash("error");
+        
         res.render("page.ejs", {name: req.session.name });
     });
 
