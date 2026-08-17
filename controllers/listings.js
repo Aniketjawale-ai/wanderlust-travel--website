@@ -31,26 +31,56 @@ module.exports.showListing = async(req, res)=>{
 };
 
 module.exports.createListing = async (req, res, next) => {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    // console.log(url, "..", filename);
+    try {
+        let url = req.file.path;
+        let filename = req.file.filename;
 
         const newListing = new Listing(req.body.listing);
-     
 
         newListing.owner = req.user._id;
 
-        newListing.image ={
+        newListing.image = {
             url: url,
             filename: filename
+        };
+
+        // Get coordinates from location + country
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(
+                `${newListing.location}, ${newListing.country}`
+            )}`,
+            {
+                headers: {
+                    "User-Agent": "Wanderlust-College-Project/1.0"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.length === 0) {
+            req.flash("error", "Location could not be found");
+            return res.redirect("/listings/new");
+        }
+
+        const latitude = parseFloat(data[0].lat);
+        const longitude = parseFloat(data[0].lon);
+
+        // Save GeoJSON coordinates
+        newListing.geometry = {
+            type: "Point",
+            coordinates: [longitude, latitude]
         };
 
         await newListing.save();
 
         req.flash("success", "New listing Created");
         res.redirect("/listings");
-    };
 
+    } catch (err) {
+        next(err);
+    }
+};
 
 module.exports.renderEditForm = async (req, res) =>{
     let { id } = req.params;

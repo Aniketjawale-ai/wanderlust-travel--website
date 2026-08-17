@@ -1,4 +1,4 @@
-const { ref } = require("joi");
+// const { ref, required, number } = require("joi");
 const mongoose = require("mongoose");
 const Schema  = mongoose.Schema;
 const Review = require("./review.js");
@@ -10,6 +10,8 @@ const listingSchema = new Schema({
         required: true,
     },
     description: String,
+
+
     image: {
         url: String,
         filename: String,
@@ -17,6 +19,16 @@ const listingSchema = new Schema({
     price: Number,
     location: String,
     country: String,
+
+   geometry: {
+    type: {
+        type: String,
+        enum: ["Point"]
+    },
+    coordinates: {
+        type: [Number]
+    }
+},
     reviews: [
         {
             type: Schema.Types.ObjectId,
@@ -32,7 +44,9 @@ const listingSchema = new Schema({
 
 listingSchema.post("findOneAndDelete", async(listing) =>{
     if(listing){
-        await Review.deleteMany({ _id: {$in: listing.reviews}});
+        await Review.deleteMany({ _id: {$in: listing.reviews}
+        
+        });
     }
 
 });

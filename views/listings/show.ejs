@@ -54,6 +54,7 @@
 <div class="col-8 offset-3 mb-3">
   
   <% if(currUser) { %>
+    <hr>
   <h4>leave a Raview</h4>
   <form action="/listings/<%= listing.id %>/reviews" 
     method="POST" 
@@ -108,12 +109,16 @@
   </form>
 
   <% } %>
-  <hr>
+  
+
+  <% if(listing.reviews.length > 0 ) { %>
   
   
-  <p><b>All Reviews</b></p>
+  
 
   <div class="row">
+
+    <p><b>All Reviews</b></p>
     
    
   
@@ -143,8 +148,26 @@
 
     <% } %>
     </div>
-  
-  
+
+    <% } %>
+
+
+    <div class="col-8 offset-0.5 mb-3">
+
+    <h4>Where you'll be</h4>
+
+    <div id="map"></div>
+
+</div>
+
+<script>
+    const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+     const listingTitle = <%- JSON.stringify(listing.title) %>;
+</script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/map.js"></script>
+
 </div>
   
   
