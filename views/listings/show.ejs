@@ -3,6 +3,7 @@
     <div class="col-8 offset-3 ">
         
     <h3><%= listing.title %></h3>
+     
 
     </div>
 
@@ -55,7 +56,7 @@
   
   <% if(currUser) { %>
     <hr>
-  <h4>leave a Raview</h4>
+  <h4>give a review</h4>
   <form action="/listings/<%= listing.id %>/reviews" 
     method="POST" 
     novalidate 
@@ -69,7 +70,7 @@
 
        <label for="rating" class="form-label">Rating</label>
 
-    <fieldset class="starability-slot">
+    <fieldset class="starability-growRotate">
 
        
   
